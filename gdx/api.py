@@ -73,11 +73,13 @@ class GDX(object):
         'SystemInfo',
         ]
 
-    def __init__(self):
+    def __init__(self, gams_dir=None):
         """Constructor."""
         self._handle = gdxcc.new_gdxHandle_tp()
         self.error_count = 0
-        self.call('CreateD', str(_gams_dir()), gdxcc.GMS_SSSIZE)
+        if gams_dir is None:
+            gams_dir = str(_gams_dir())
+        self.call('CreateD', gams_dir, gdxcc.GMS_SSSIZE)
 
     def call(self, method, *args):
         """Invoke the GDX API method named gdx\ *Method*.

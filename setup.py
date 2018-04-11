@@ -11,6 +11,7 @@ setup(name='gdx',
         'backports.shutil_which',
         'future',
         'xarray',
+        'gdxcc'
         ],
       tests_require=['pytest'],
       url='https://github.com/khaeru/py-gdx',

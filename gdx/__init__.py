@@ -40,6 +40,8 @@ class File(xr.Dataset):
     constructed, containing only the labels appearing in the respective
     dimension of that parameter.
 
+    gams_dir can be explicitly defined in case gams does not exist in PATH.
+
     .. note::
 
        For instance, the GAMS Parameter ``foo(*,*,*)`` is loaded as
@@ -56,12 +58,12 @@ class File(xr.Dataset):
     _alias = {}
     _implicit = False
 
-    def __init__(self, filename='', lazy=True, implicit=True, skip=set()):
+    def __init__(self, filename='', lazy=True, implicit=True, gams_dir=None, skip=set()):
         """Constructor."""
         super(File, self).__init__()  # Invoke Dataset constructor
 
         # load the GDX API
-        self._api = GDX()
+        self._api = GDX(gams_dir)
         self._api.open_read(str(filename))
 
         # Basic information about the GDX file
