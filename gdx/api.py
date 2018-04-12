@@ -50,7 +50,28 @@ def _gams_dir():
     Returns the path to the  executable is a required argument of
     ``gdxCreateD``, the method for connecting to the GDX API.
     """
-    return dirname(which('gams'))
+    # First attempt: Try to see if gams executable can be called with which where (is in PATH)
+    out = which('gams')
+    if out is not None:
+        return str(dirname(out))
+    # Second attempt: Try to search for the gams folder
+
+    import subprocess
+    if sys.platform == 'linux2' or sys.platform == 'linux':
+        try:
+            if sys.platform == 'linux2' or sys.platform == 'linux':
+                tmp = subprocess.check_output(['locate', '-i', 'libgamscall64.so']).decode()
+                lines = tmp.split('\n')
+            elif sys.platform == 'win32':
+                tmp = subprocess.check_output(['where', 'gams.exe']).decode()
+                lines = tmp.split('\r\n')
+            else:
+                raise NotImplementedError('Unknown Platform')
+            # Get the first instance of the find results
+            return str(dirname(lines[0]))
+        except:
+            raise LookupError("Couldn't locate gams folder")
+
 
 
 class GDX(object):
@@ -78,7 +99,7 @@ class GDX(object):
         self._handle = gdxcc.new_gdxHandle_tp()
         self.error_count = 0
         if gams_dir is None:
-            gams_dir = str(_gams_dir())
+            gams_dir = _gams_dir()
         self.call('CreateD', gams_dir, gdxcc.GMS_SSSIZE)
 
     def call(self, method, *args):

@@ -19,7 +19,7 @@ debug = logger.debug
 info = logger.info
 
 
-__version__ = '2'
+__version__ = '3'
 
 
 __all__ = [
@@ -63,7 +63,7 @@ class File(xr.Dataset):
         super(File, self).__init__()  # Invoke Dataset constructor
 
         # load the GDX API
-        self._api = GDX(gams_dir)
+        self._api = GDX(gams_dir=gams_dir)
         self._api.open_read(str(filename))
 
         # Basic information about the GDX file
